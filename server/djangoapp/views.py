@@ -98,10 +98,7 @@ def get_dealerships(request):
         # Return a list of dealer short name
         return HttpResponse(dealer_names)
 
-
-# Create a `get_dealer_details` view to render the reviews of a dealer
-# def get_dealer_details(request, dealer_id):
-def get_dealer_details(request, dealerId):
+def get_dealership(request, dealerId):
     if request.method == "GET":
         url = "https://us-south.functions.appdomain.cloud/api/v1/web/c487dbbf-0abc-4dc7-8496-c3ce8f0e3926/dealership-package/get-dealership.json"
         # Get dealers from the URL
@@ -111,6 +108,23 @@ def get_dealer_details(request, dealerId):
         dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
         # Return a list of dealer short name
         return HttpResponse(dealer_names)
+
+# Create a `get_dealer_details` view to render the reviews of a dealer
+# def get_dealer_details(request, dealer_id):
+
+
+def get_dealer_details(request, dealerId):
+    # if request.method == "GET":
+    if request.method == "GET":
+        url = "https://us-south.functions.appdomain.cloud/api/v1/web/c487dbbf-0abc-4dc7-8496-c3ce8f0e3926/dealership-package/get-review.json"
+        # Get dealers from the URL
+        reviews = restapis.get_dealer_reviews_from_cf(url, int(dealerId))
+        return HttpResponse(reviews)
+        # Concat all dealer's short name
+        reviews_names = ' '.join([dealer.dealership for review in reviews])
+        # Return a list of dealer short name
+        return HttpResponse(reviews_names)    
+
 
 # Create a `add_review` view to submit a review
 # def add_review(request, dealer_id):
